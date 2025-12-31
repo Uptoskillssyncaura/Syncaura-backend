@@ -2,6 +2,9 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 
+import taskRoutes from "./routes/task.routes.js";
+import noticeRoutes from "./routes/notice.routes.js"; // ✅ ADD THIS
+
 dotenv.config();
 
 const app = express();
@@ -13,8 +16,8 @@ app.use(express.json());
 connectDB();
 
 // routes
-import taskRoutes from "./routes/task.routes.js";
 app.use("/api/tasks", taskRoutes);
+app.use("/api/notices", noticeRoutes); // ✅ ADD THIS
 
 // start
 app.listen(process.env.PORT, () => {
