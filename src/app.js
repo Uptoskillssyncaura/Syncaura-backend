@@ -8,7 +8,7 @@ import authRoutes from './routes/authRoutes.js';
 import taskRoutes from './routes/task.routes.js';
 import {errorMiddleware} from './middlewares/errorHandler.js';
 import channelRoutes from './routes/channelRoutes.js';
-
+import noticeRoutes from "./routes/notice.routes.js";
 dotenv.config();
 
 const app = express();
@@ -28,6 +28,7 @@ app.use(cookieParser());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
+app.use("/api/notices", noticeRoutes);
 app.use('/api/channels', channelRoutes);
 // Health check route
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
