@@ -1,7 +1,7 @@
-const User = require('../models/user.model');
-const Notice = require('../models/notice.model');
+import User from '../models/user.model.js';
+import Notice from '../models/notice.model.js';
 
-const listUsers = async (req, res) => {
+export const listUsers = async (req, res) => {
   try {
     const users = await User.find().select('-password');
     res.json(users);
@@ -10,7 +10,7 @@ const listUsers = async (req, res) => {
   }
 };
 
-const updateUserRole = async (req, res) => {
+export const updateUserRole = async (req, res) => {
   try {
     const { role } = req.body;
     if (!['user', 'coadmin', 'admin'].includes(role)) return res.status(400).json({ message: 'Invalid role' });
@@ -23,7 +23,7 @@ const updateUserRole = async (req, res) => {
 };
 
 // Reuse notice controller logic for admin routes if needed
-const getAllNotices = async (req, res) => {
+export const getAllNotices = async (req, res) => {
   try {
     const notices = await Notice.find().populate('author', 'name email role').sort({ createdAt: -1 });
     res.json(notices);
@@ -31,5 +31,3 @@ const getAllNotices = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-
-module.exports = { listUsers, updateUserRole, getAllNotices };

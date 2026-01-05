@@ -1,6 +1,6 @@
-const Task = require('../models/task.model');
+import Task from '../models/task.model.js';
 
-const createTask = async (req, res) => {
+export const createTask = async (req, res) => {
   try {
     const task = await Task.create({ ...req.body, assignedTo: req.body.assignedTo || req.user.id });
     res.status(201).json(task);
@@ -9,7 +9,7 @@ const createTask = async (req, res) => {
   }
 };
 
-const getTasks = async (req, res) => {
+export const getTasks = async (req, res) => {
   try {
     const tasks = await Task.find().populate('assignedTo', 'name email').sort({ createdAt: -1 });
     res.json(tasks);
@@ -18,7 +18,7 @@ const getTasks = async (req, res) => {
   }
 };
 
-const getTask = async (req, res) => {
+export const getTask = async (req, res) => {
   try {
     const task = await Task.findById(req.params.id).populate('assignedTo', 'name email');
     if (!task) return res.status(404).json({ message: 'Not found' });
@@ -28,7 +28,7 @@ const getTask = async (req, res) => {
   }
 };
 
-const updateTask = async (req, res) => {
+export const updateTask = async (req, res) => {
   try {
     const updated = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.json(updated);
@@ -37,7 +37,7 @@ const updateTask = async (req, res) => {
   }
 };
 
-const deleteTask = async (req, res) => {
+export const deleteTask = async (req, res) => {
   try {
     await Task.findByIdAndDelete(req.params.id);
     res.json({ message: 'Deleted' });
@@ -45,5 +45,3 @@ const deleteTask = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-
-module.exports = { createTask, getTasks, getTask, updateTask, deleteTask };

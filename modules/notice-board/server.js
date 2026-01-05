@@ -1,12 +1,12 @@
-require('dotenv').config();
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
+import 'dotenv/config';
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
 
-const authRoutes = require('./routes/auth.routes');
-const noticeRoutes = require('./routes/notice.routes');
-const taskRoutes = require('./routes/task.routes');
-const adminRoutes = require('./routes/admin.routes');
+import authRoutes from './routes/auth.routes.js';
+import noticeRoutes from './routes/notice.routes.js';
+import taskRoutes from './routes/task.routes.js';
+import adminRoutes from './routes/admin.routes.js';
 
 const app = express();
 app.use(cors());
@@ -22,12 +22,11 @@ const PORT = process.env.PORT || 3000;
 const MONGO = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/noticeboard';
 
 // Mongoose v6+ manages options internally; don't pass deprecated options
-mongoose.connect(MONGO)
-  .then(() => {
-    console.log('Connected to MongoDB');
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-  })
-  .catch(err => {
-    console.error('DB connection error:', err.message);
-    process.exit(1);
-  });
+try {
+  await mongoose.connect(MONGO);
+  console.log('Connected to MongoDB');
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+} catch (err) {
+  console.error('DB connection error:', err.message);
+  process.exit(1);
+}

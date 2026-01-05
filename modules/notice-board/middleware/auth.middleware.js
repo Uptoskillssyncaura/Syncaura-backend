@@ -1,7 +1,7 @@
-const jwt = require('jsonwebtoken');
-const User = require('../models/user.model');
+import jwt from 'jsonwebtoken';
+import User from '../models/user.model.js';
 
-module.exports = async function (req, res, next) {
+const auth = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ message: 'No token provided' });
 
@@ -16,3 +16,5 @@ module.exports = async function (req, res, next) {
     res.status(401).json({ message: 'Invalid token' });
   }
 };
+
+export default auth;
