@@ -5,14 +5,15 @@ import Task from "../models/task.model.js";
  */
 export const createTask = async (req, res) => {
   try {
-    const { title, description, priority, assignedTo, deadline } = req.body;
+    const { title, description, priority, assignedTo, deadline,status } = req.body;
 
     const task = await Task.create({
       title,
       description,
       priority,
       assignedTo,
-      deadline
+      deadline,
+      status: status || "TODO"
     }); 
     res.status(201).json(task);
   } catch (error) {

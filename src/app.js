@@ -10,6 +10,7 @@ import {errorMiddleware} from './middlewares/errorHandler.js';
 import channelRoutes from './routes/channelRoutes.js';
 import noticeRoutes from "./routes/notice.routes.js";
 import documentRoutes from "./routes/documentRoutes.js";
+import reportRoutes from "./routes/reportRoutes.js";
 dotenv.config();
 
 const app = express();
@@ -32,7 +33,7 @@ app.use('/api/tasks', taskRoutes);
 app.use("/api/notices", noticeRoutes);
 app.use('/api/channels', channelRoutes);
 app.use("/api/documents", documentRoutes);
-
+app.use("/api/reports", reportRoutes);
 // Health check route
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
