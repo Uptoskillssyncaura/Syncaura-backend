@@ -1,3 +1,4 @@
+const chatRoutes = require("./routes/chatRoutes");
 import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
@@ -52,3 +53,5 @@ app.use((req, res) => {
 app.use(errorMiddleware);
 
 export default app;
+app.use("/api/chat", chatRoutes);
+
