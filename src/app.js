@@ -1,4 +1,3 @@
-const chatRoutes = require("./routes/chatRoutes");
 import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
@@ -12,6 +11,7 @@ import channelRoutes from './routes/channelRoutes.js';
 import noticeRoutes from "./routes/notice.routes.js";
 import documentRoutes from "./routes/documentRoutes.js";
 import reportRoutes from "./routes/reportRoutes.js";
+import chatRoutes from "./routes/chatRoutes.js";
 dotenv.config();
 
 const app = express();
@@ -41,6 +41,7 @@ app.use("/api/notices", noticeRoutes);
 app.use('/api/channels', channelRoutes);
 app.use("/api/documents", documentRoutes);
 app.use("/api/reports", reportRoutes);
+app.use("/api/chat", chatRoutes);
 // Health check route
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
@@ -53,5 +54,5 @@ app.use((req, res) => {
 app.use(errorMiddleware);
 
 export default app;
-app.use("/api/chat", chatRoutes);
+
 

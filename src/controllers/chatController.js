@@ -1,7 +1,7 @@
-const ChatMessage = require("../models/ChatMessage");
+import ChatMessage from "../models/ChatMessage.js";
 
 // Send message
-exports.sendMessage = async (req, res) => {
+export const sendMessage = async (req, res) => {
   try {
     const message = await ChatMessage.create(req.body);
     res.status(201).json({
@@ -17,7 +17,7 @@ exports.sendMessage = async (req, res) => {
 };
 
 // Get all messages
-exports.getMessages = async (req, res) => {
+export const getMessages = async (req, res) => {
   try {
     const messages = await ChatMessage.find();
     res.status(200).json({
