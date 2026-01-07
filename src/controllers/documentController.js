@@ -1,5 +1,6 @@
 import Document from "../models/Document.js";
-
+import { createPDF } from "../utils/exportUtils.js";
+import ExcelJS from "exceljs";
 /**
  * CREATE DOCUMENT
  */
@@ -100,3 +101,67 @@ export const getDocumentVersions = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+export const exportDocumentPDF = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const doc = await Document.findById(id);
+
+    if (!doc) return res.status(404).json({ message: "Document not found" });
+
+    const pdfData = await createPDF(doc);
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", `attachment; filename=${doc.title}.pdf`);
+    res.send(pdfData);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Export document as Excel
+export const exportDocumentExcel = async (req, res) => {
+  try {
+    const doc = await Document.findById(req.params.id);
+    if (!doc) {
+      return res.status(404).json({ message: "Document not found" });
+    }
+
+    const workbook = new ExcelJS.Workbook();
+    const sheet = workbook.addWorksheet("Document");
+
+    sheet.columns = [
+      { header: "Title", key: "title", width: 30 },
+      { header: "Content", key: "content", width: 50 },
+      { header: "Project ID", key: "projectId", width: 30 },
+      { header: "Created At", key: "createdAt", width: 25 },
+    ];
+
+    sheet.addRow({
+      title: doc.title,
+      content: doc.content,
+      projectId: String(doc.projectId),
+      createdAt: doc.createdAt.toISOString(),
+    });
+
+    // ✅ CREATE BUFFER (IMPORTANT)
+    const buffer = await workbook.xlsx.writeBuffer();
+
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    res.setHeader(
+      "Content-Disposition",
+      'attachment; filename="document.xlsx"'
+    );
+    res.setHeader("Content-Length", buffer.length);
+
+    res.end(buffer);
+    return;
+  } catch (error) {
+    console.error("Excel export error:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+

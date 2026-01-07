@@ -18,8 +18,14 @@ const app = express();
 // Connect Database
 connectDB();
 
-// Middleware
-app.use(morgan('dev'));
+// // Middleware
+// app.use((req, res, next) => {
+//   if (req.url.includes("/export")) {
+//     return next(); // skip morgan for file downloads
+//   }
+//   morgan('dev')(req, res, next);
+// });
+
 app.use(cors({
   origin: process.env.CLIENT_URL,
   credentials: true
