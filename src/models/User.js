@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // Indexes
-userSchema.index({ email: 1 }, { unique: true });
+// email uniqueness enforced via field option 'unique: true' on the `email` field
 
 // Methods
 userSchema.methods.comparePassword = async function (candidatePassword) {

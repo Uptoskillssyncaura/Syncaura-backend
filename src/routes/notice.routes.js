@@ -12,7 +12,6 @@ const router = express.Router();
 
 // View all notices (any authenticated user)
 router.get("/", auth, getAllNotices);
-
 //  Create a new notice (admin/coadmin only)
 router.post("/", auth, roleCheck, createNotice);
 
