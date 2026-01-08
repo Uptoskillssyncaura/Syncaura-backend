@@ -1,6 +1,6 @@
 import Notice from "../models/notice.model.js";
 
-// CREATE notice
+//  CREATE notice
 export const createNotice = async (req, res) => {
   try {
     const notice = await Notice.create(req.body);
@@ -13,7 +13,7 @@ export const createNotice = async (req, res) => {
   }
 };
 
-// GET all notices
+//  GET all notices
 export const getAllNotices = async (req, res) => {
   try {
     const notices = await Notice.find().sort({ createdAt: -1 });
@@ -26,7 +26,7 @@ export const getAllNotices = async (req, res) => {
   }
 };
 
-// UPDATE notice
+//  UPDATE notice
 export const updateNotice = async (req, res) => {
   try {
     const notice = await Notice.findByIdAndUpdate(
@@ -36,7 +36,7 @@ export const updateNotice = async (req, res) => {
     );
 
     if (!notice) {
-      return res.status(404).json({ message: "Notice not found" });
+      return res.status(404).json({ success: false, message: "Notice not found" });
     }
 
     res.status(200).json({ success: true, data: notice });
@@ -45,13 +45,13 @@ export const updateNotice = async (req, res) => {
   }
 };
 
-// DELETE notice
+//  DELETE notice
 export const deleteNotice = async (req, res) => {
   try {
     const notice = await Notice.findByIdAndDelete(req.params.id);
 
     if (!notice) {
-      return res.status(404).json({ message: "Notice not found" });
+      return res.status(404).json({ success: false, message: "Notice not found" });
     }
 
     res.status(200).json({ success: true, message: "Notice deleted" });
