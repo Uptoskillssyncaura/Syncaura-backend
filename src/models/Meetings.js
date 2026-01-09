@@ -1,0 +1,37 @@
+import mongoose from "mongoose";
+
+const meetingSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+
+    description: {
+      type: String,
+    },
+
+    startTime: {
+      type: Date,
+      required: true,
+    },
+
+    endTime: {
+      type: Date,
+      required: true,
+    },
+
+    participants: {
+      type: [String], // emails
+      default: [],
+    },
+
+    // ✅ Google Calendar integration proof
+    googleEventId: {
+      type: String,
+    },
+  },
+  { timestamps: true }
+);
+
+export default mongoose.model("Meeting", meetingSchema);

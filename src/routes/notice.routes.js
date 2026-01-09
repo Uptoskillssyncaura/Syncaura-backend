@@ -6,7 +6,7 @@ import {
   deleteNotice,
 } from "../controllers/notice.controller.js";
 import auth from "../middlewares/auth.js"; // existing authentication middleware
-import roleCheck from "../middlewares/rolecheck.js"; // restrict access to admin/coadmin
+import roleCheck from "../middlewares/role.js"; // restrict access to admin/coadmin
 
 const router = express.Router();
 
