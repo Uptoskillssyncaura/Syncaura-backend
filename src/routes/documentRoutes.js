@@ -10,7 +10,7 @@ import {
   exportDocumentPDF, 
   exportDocumentExcel
 } from "../controllers/documentController.js";
-import { auth } from "../middlewares/auth.js";
+import  auth  from "../middlewares/auth.js";
 
 // All routes protected
 router.post("/", auth, createDocument);

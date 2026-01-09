@@ -6,7 +6,7 @@ import {
   updateProject,
   deleteProject,
 } from "../controllers/projectController.js";
-import { auth } from "../middlewares/auth.js";
+import  auth  from "../middlewares/auth.js";
 
 const router = express.Router();
 

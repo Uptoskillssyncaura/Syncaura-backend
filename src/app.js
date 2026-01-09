@@ -12,6 +12,8 @@ import noticeRoutes from "./routes/notice.routes.js";
 import documentRoutes from "./routes/documentRoutes.js";
 import reportRoutes from "./routes/reportRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
+import meetingRoutes from "./routes/meeting.routes.js";
+
 
 dotenv.config();
 
@@ -20,13 +22,6 @@ const app = express();
 // Connect Database
 connectDB();
 
-// // Middleware
-// app.use((req, res, next) => {
-//   if (req.url.includes("/export")) {
-//     return next(); // skip morgan for file downloads
-//   }
-//   morgan('dev')(req, res, next);
-// });
 
 app.use(cors({
   origin: process.env.CLIENT_URL,
@@ -36,6 +31,7 @@ app.use(express.json({ limit: '10kb' }));
 app.use(cookieParser());
 
 // Routes
+app.use("/api/meetings", meetingRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use("/api/notices", noticeRoutes);

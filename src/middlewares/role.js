@@ -1,4 +1,4 @@
-export const permit = (...allowedRoles) => {
+ const permit = (...allowedRoles) => {
   return (req, res, next) => {
     if (!req.user || !req.user.role) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -11,3 +11,5 @@ export const permit = (...allowedRoles) => {
     next();
   };
 };
+
+export default permit;
