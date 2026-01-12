@@ -13,6 +13,8 @@ import documentRoutes from "./routes/documentRoutes.js";
 import reportRoutes from "./routes/reportRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
 import meetingRoutes from "./routes/meeting.routes.js";
+import noteRoutes from "./routes/note.routes.js";
+import attachmentRoutes from "./routes/attachment.routes.js";
 
 
 dotenv.config();
@@ -39,6 +41,8 @@ app.use('/api/channels', channelRoutes);
 app.use("/api/documents", documentRoutes);
 app.use("/api/reports", reportRoutes);
 app.use("/api/projects", projectRoutes);
+app.use("/api/attachments",attachmentRoutes);
+app.use("/api/notes",noteRoutes);
 // Health check route
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
