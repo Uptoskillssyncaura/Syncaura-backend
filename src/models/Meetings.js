@@ -26,7 +26,12 @@ const meetingSchema = new mongoose.Schema(
       default: [],
     },
 
-    // ✅ Google Calendar integration proof
+    createdBy:{
+      type:mongoose.Schema.Types.ObjectId,
+      ref:"User",
+      required:true,
+    },
+   // ✅ Google Calendar integration proof
     googleEventId: {
       type: String,
     },
