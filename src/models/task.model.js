@@ -29,7 +29,30 @@ const taskSchema = new mongoose.Schema(
     },
     deadline: {
       type: Date
-    }
+    },
+    dependencies: [
+  {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Task",
+  },
+],
+reminderAt: {
+  type: Date,
+},
+startDate: Date,
+endDate: Date,
+
+     subtasks: [
+      {
+        title: { type: String, required: true },
+        status: {
+          type: String,
+          enum: ["TODO", "DONE"],
+          default: "TODO",
+        },
+        createdAt: { type: Date, default: Date.now },
+      },
+    ],
   },
   { timestamps: true }
 );

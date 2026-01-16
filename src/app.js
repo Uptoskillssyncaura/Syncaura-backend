@@ -16,6 +16,8 @@ import meetingRoutes from "./routes/meeting.routes.js";
 import noteRoutes from "./routes/note.routes.js";
 import attachmentRoutes from "./routes/attachment.routes.js";
 
+import dashboardRoutes from './routes/dashboardRoutes.js';
+import leaveRoutes from './routes/leaveRoutes.js'
 
 dotenv.config();
 
@@ -24,6 +26,13 @@ const app = express();
 // Connect Database
 connectDB();
 
+// Middleware
+// app.use((req, res, next) => {
+//   if (req.url.includes("/export")) {
+//     return next(); // skip morgan for file downloads
+//   }
+//   morgan('dev')(req, res, next);
+// });
 
 app.use(cors({
   origin: process.env.CLIENT_URL,
@@ -43,6 +52,8 @@ app.use("/api/reports", reportRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/attachments",attachmentRoutes);
 app.use("/api/notes",noteRoutes);
+app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/leave', leaveRoutes);
 // Health check route
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
