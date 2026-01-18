@@ -3,6 +3,8 @@ import morgan from 'morgan';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import taskRoutes from './routes/task.routes.js';
@@ -16,6 +18,9 @@ import dashboardRoutes from './routes/dashboardRoutes.js';
 import leaveRoutes from './routes/leaveRoutes.js'
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -36,6 +41,9 @@ app.use(cors({
 }));
 app.use(express.json({ limit: '10kb' }));
 app.use(cookieParser());
+
+// Serve static files from public directory
+app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
 
 // Routes
 app.use('/api/auth', authRoutes);
