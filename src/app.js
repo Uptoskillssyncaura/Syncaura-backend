@@ -21,27 +21,17 @@ import attachmentRoutes from "./routes/attachment.routes.js";
 import meetingRoutes from "./routes/meeting.routes.js";
 import calendarTestRoute from "./routes/calendarTest.route.js";
 dotenv.config();
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 const app = express();
-
-// Connect Database
 connectDB();
-
-
 app.use(cors({
   origin: process.env.CLIENT_URL,
   credentials: true
 }));
 app.use(express.json({ limit: '10kb' }));
 app.use(cookieParser());
-
-// Serve static files from public directory
 app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
-
-// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use("/api/notices", noticeRoutes);
@@ -58,17 +48,9 @@ app.use("/api/notes",noteRoutes);
 app.use("/api/meetings", meetingRoutes);
 app.use("/api", calendarTestRoute);
 main
-// Health check route
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
-
-// 404 handler
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });
 });
-
-// Global error handler
 app.use(errorMiddleware);
-
 export default app;
-
-
