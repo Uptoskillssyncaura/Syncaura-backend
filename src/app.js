@@ -21,7 +21,6 @@ import noteRoutes from "./routes/note.routes.js";
 import attachmentRoutes from "./routes/attachment.routes.js";
 import meetingRoutes from "./routes/meeting.routes.js";
 import calendarTestRoute from "./routes/calendarTest.route.js";
- main
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
