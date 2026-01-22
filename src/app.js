@@ -13,7 +13,9 @@ import documentRoutes from "./routes/documentRoutes.js";
 import reportRoutes from "./routes/reportRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
 import dashboardRoutes from './routes/dashboardRoutes.js';
-import leaveRoutes from './routes/leaveRoutes.js'
+import leaveRoutes from './routes/leaveRoutes.js';
+import complaintRoutes from './routes/complaintRoutes.js';
+import notificationRoutes from './routes/notificationRoutes.js';
 
 dotenv.config();
 
@@ -47,6 +49,8 @@ app.use("/api/reports", reportRoutes);
 app.use("/api/projects", projectRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/leave', leaveRoutes);
+app.use('/api/complaints', complaintRoutes);
+app.use('/api/notifications', notificationRoutes);
 // Health check route
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
