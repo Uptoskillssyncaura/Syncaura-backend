@@ -1,0 +1,42 @@
+import mongoose from "mongoose";
+
+const meetingSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+
+    description: {
+      type: String,
+    },
+
+    startTime: {
+      type: Date,
+      required: true,
+    },
+
+    endTime: {
+      type: Date,
+      required: true,
+    },
+
+    participants: {
+      type: [String], // emails
+      default: [],
+    },
+
+    googleEventId: {
+      type: String,
+    },
+
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+  },
+  { timestamps: true }
+);
+
+export default mongoose.model("Meeting", meetingSchema);

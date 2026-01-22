@@ -2,9 +2,6 @@ import Leave from '../models/Leave.js';
 
 export const applyLeave = async (req, res) => {
   try {
-    console.log("REQ.USER 👉", req.user);
-    console.log("REQ.BODY 👉", req.body);
-
     if (!req.user) {
       return res.status(401).json({ message: "User not authenticated" });
     }
@@ -14,23 +11,59 @@ export const applyLeave = async (req, res) => {
     }
 
     const { fromDate, toDate, reason } = req.body;
-    const userId = req.user.id;
 
-    const newLeave = new Leave({
-      fromDate,
-      toDate,
-      reason,
-      user: userId
+    if (!fromDate || !toDate || !reason) {
+      return res.status(400).json({
+        message: "fromDate, toDate and reason are required"
+      });
+    }
+
+ 
+    const from = new Date(fromDate);
+    const to = new Date(toDate);
+
+    if (isNaN(from) || isNaN(to)) {
+      return res.status(400).json({
+        message: "Invalid date format. Use YYYY-MM-DD"
+      });
+    }
+
+ 
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+ 
+    if (from < today) {
+      return res.status(400).json({
+        message: "fromDate cannot be before today"
+      });
+    }
+
+ 
+    if (to < from) {
+      return res.status(400).json({
+        message: "toDate cannot be before fromDate"
+      });
+    }
+
+    const newLeave = await Leave.create({
+      user: req.user.id,
+      fromDate: from,
+      toDate: to,
+      reason
     });
 
-    await newLeave.save();
-
-    res.status(201).json({ message: "Leave applied successfully" });
+    res.status(201).json({
+      success: true,
+      message: "Leave applied successfully",
+      data: newLeave
+    });
   } catch (error) {
     console.error("Error applying leave:", error);
     res.status(500).json({ message: "Error applying leave" });
   }
 };
+
 
 export const getMyLeaves = async (req, res) => {
   try {

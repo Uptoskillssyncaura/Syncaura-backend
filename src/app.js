@@ -1,8 +1,9 @@
 import express from 'express';
-import morgan from 'morgan';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import taskRoutes from './routes/task.routes.js';
@@ -16,21 +17,23 @@ import dashboardRoutes from './routes/dashboardRoutes.js';
 import leaveRoutes from './routes/leaveRoutes.js';
 import complaintRoutes from './routes/complaintRoutes.js';
 import notificationRoutes from './routes/notificationRoutes.js';
+import leaveRoutes from './routes/leaveRoutes.js'
+import noteRoutes from "./routes/note.routes.js";
+import attachmentRoutes from "./routes/attachment.routes.js";
+import meetingRoutes from "./routes/meeting.routes.js";
+import calendarTestRoute from "./routes/calendarTest.route.js";
+
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
 // Connect Database
 connectDB();
 
-// Middleware
-// app.use((req, res, next) => {
-//   if (req.url.includes("/export")) {
-//     return next(); // skip morgan for file downloads
-//   }
-//   morgan('dev')(req, res, next);
-// });
 
 app.use(cors({
   origin: process.env.CLIENT_URL,
@@ -38,6 +41,9 @@ app.use(cors({
 }));
 app.use(express.json({ limit: '10kb' }));
 app.use(cookieParser());
+
+// Serve static files from public directory
+app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -51,6 +57,10 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/leave', leaveRoutes);
 app.use('/api/complaints', complaintRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use("/api/attachments",attachmentRoutes);
+app.use("/api/notes",noteRoutes);
+app.use("/api/meetings", meetingRoutes);
+app.use("/api", calendarTestRoute);
 // Health check route
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
