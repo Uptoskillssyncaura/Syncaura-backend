@@ -1,4 +1,5 @@
 import Notice from "../models/notice.model.js";
+import { notifyAllUsersAboutNotice } from "../utils/notifications.js";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
@@ -9,6 +10,19 @@ const __dirname = path.dirname(__filename);
 // CREATE notice with attachments
 export const createNotice = async (req, res) => {
   try {
+    const notice = await Notice.create(req.body);
+    
+    // Send notifications to all users about the new notice
+    try {
+      await notifyAllUsersAboutNotice(notice);
+    } catch (notificationError) {
+      console.error('Notification error:', notificationError);
+      // Don't fail the request due to notification error
+    }
+    
+    res.status(201).json({
+      success: true,
+      data: notice,
     const files = req.files?.map(file => ({
       fileName: file.originalname,
       fileUrl: `/uploads/${file.filename}`,
