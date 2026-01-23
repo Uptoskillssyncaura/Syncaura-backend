@@ -14,7 +14,6 @@ import documentRoutes from "./routes/documentRoutes.js";
 import reportRoutes from "./routes/reportRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
 import dashboardRoutes from './routes/dashboardRoutes.js';
-import leaveRoutes from './routes/leaveRoutes.js';
 import complaintRoutes from './routes/complaintRoutes.js';
 import notificationRoutes from './routes/notificationRoutes.js';
 import leaveRoutes from './routes/leaveRoutes.js'
