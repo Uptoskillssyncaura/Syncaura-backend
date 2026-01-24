@@ -10,30 +10,33 @@ const __dirname = path.dirname(__filename);
 // CREATE notice with attachments
 export const createNotice = async (req, res) => {
   try {
+    // Prepare attachments
     const files = req.files?.map(file => ({
       fileName: file.originalname,
       fileUrl: `/uploads/${file.filename}`,
       uploadedAt: new Date()
     })) || [];
 
+    // Create notice ONCE
     const notice = await Notice.create({
       ...req.body,
       attachments: files
     });
 
-    // Send notifications (non-blocking)
+    // Send notifications (do not block API)
     try {
       await notifyAllUsersAboutNotice(notice);
     } catch (notificationError) {
       console.error("Notification error:", notificationError);
     }
 
+    // Send response ONCE
     res.status(201).json({
       success: true,
       data: notice
     });
   } catch (error) {
-    // Cleanup uploaded files if error occurs
+    // Cleanup uploaded files if error
     if (req.files) {
       req.files.forEach(file => {
         const filePath = path.join(
