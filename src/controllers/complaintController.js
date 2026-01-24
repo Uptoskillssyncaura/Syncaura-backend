@@ -327,7 +327,7 @@ export const addComment = async (req, res, next) => {
 
     // Notify the filer about new comment
     try {
-      if (isFiler) {
+      if (isFiler && !isAdmin) {
         // Notify admins if comment is from user
         const admins = await User.find({ role: { $in: [ROLES.ADMIN, ROLES.CO_ADMIN] } });
         const adminIds = admins.map(admin => admin._id);
@@ -369,7 +369,7 @@ export const addComment = async (req, res, next) => {
  */
 export const updateComplaint = async (req, res, next) => {
   try {
-    const { title, description, category, severity, priority } = req.body;
+    const { title, description, category, severity, priority,status } = req.body;
 
     const updateData = {};
     if (title) updateData.title = title;
@@ -377,6 +377,9 @@ export const updateComplaint = async (req, res, next) => {
     if (category) updateData.category = category;
     if (severity) updateData.severity = severity;
     if (priority) updateData.priority = priority;
+    if (status && (req.user.role === ROLES.ADMIN || req.user.role === ROLES.CO_ADMIN)) {
+    updateData.status = status;
+}
 
     const complaint = await Complaint.findByIdAndUpdate(
       req.params.id,

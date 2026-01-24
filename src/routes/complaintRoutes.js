@@ -23,7 +23,8 @@ router.use(auth);
 /**
  * Public routes (all authenticated users)
  */
-
+// Get complaint statistics
+router.get('/stats', permit(ROLES.ADMIN, ROLES.CO_ADMIN), getComplaintStats);
 // File a new complaint
 router.post('/', createComplaint);
 
@@ -55,7 +56,6 @@ router.patch('/:id', permit(ROLES.ADMIN, ROLES.CO_ADMIN), updateComplaint);
 // Delete complaint
 router.delete('/:id', permit(ROLES.ADMIN, ROLES.CO_ADMIN), deleteComplaint);
 
-// Get complaint statistics
-router.get('/stats', permit(ROLES.ADMIN, ROLES.CO_ADMIN), getComplaintStats);
+
 
 export default router;
