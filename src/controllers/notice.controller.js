@@ -10,19 +10,6 @@ const __dirname = path.dirname(__filename);
 // CREATE notice with attachments
 export const createNotice = async (req, res) => {
   try {
-    const notice = await Notice.create(req.body);
-    
-    // Send notifications to all users about the new notice
-    try {
-      await notifyAllUsersAboutNotice(notice);
-    } catch (notificationError) {
-      console.error('Notification error:', notificationError);
-      // Don't fail the request due to notification error
-    }
-    
-    res.status(201).json({
-      success: true,
-      data: notice,
     const files = req.files?.map(file => ({
       fileName: file.originalname,
       fileUrl: `/uploads/${file.filename}`,
@@ -34,18 +21,37 @@ export const createNotice = async (req, res) => {
       attachments: files
     });
 
-    res.status(201).json({ success: true, data: notice });
+    // Send notifications (non-blocking)
+    try {
+      await notifyAllUsersAboutNotice(notice);
+    } catch (notificationError) {
+      console.error("Notification error:", notificationError);
+    }
+
+    res.status(201).json({
+      success: true,
+      data: notice
+    });
   } catch (error) {
-    // Clean up uploaded files on error
+    // Cleanup uploaded files if error occurs
     if (req.files) {
       req.files.forEach(file => {
-        const filePath = path.join(__dirname, '../../public/uploads', file.filename);
+        const filePath = path.join(
+          __dirname,
+          "../../public/uploads",
+          file.filename
+        );
         if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
       });
     }
-    res.status(500).json({ success: false, message: error.message });
+
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
   }
 };
+
 
 // GET all notices
 export const getAllNotices = async (req, res) => {
