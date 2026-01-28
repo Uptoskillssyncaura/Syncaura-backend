@@ -29,6 +29,9 @@ const meetingSchema = new mongoose.Schema(
     googleEventId: {
       type: String,
     },
+    googleMeetLink: {
+  type: String,
+},
 
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,

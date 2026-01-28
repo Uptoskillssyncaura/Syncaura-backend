@@ -21,7 +21,7 @@ import noteRoutes from "./routes/note.routes.js";
 import attachmentRoutes from "./routes/attachment.routes.js";
 import meetingRoutes from "./routes/meeting.routes.js";
 import calendarTestRoute from "./routes/calendarTest.route.js";
-
+import googleAuthRoutes from "./routes/googleAuth.route.js";
 
 dotenv.config();
 
@@ -60,6 +60,8 @@ app.use("/api/attachments",attachmentRoutes);
 app.use("/api/notes",noteRoutes);
 app.use("/api/meetings", meetingRoutes);
 app.use("/api", calendarTestRoute);
+app.use("/auth", googleAuthRoutes);
+
 // Health check route
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 

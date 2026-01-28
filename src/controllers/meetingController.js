@@ -1,47 +1,59 @@
 import Meeting from "../models/Meetings.js";
-import { createCalendarEvent } from "../services/googleCalendar.js";
 import mongoose from "mongoose";
 
 // ✅ Create meeting
+import { getCalendarClient } from "../utils/googleAuth.js";
+
 export const createMeeting = async (req, res) => {
   try {
+    const tokens = req.googleTokens;
+    if (!tokens) {
+      return res.status(403).json({ message: "Google account not connected" });
+    }
+
     const { title, description, startTime, endTime } = req.body;
 
-    if (!title || !startTime || !endTime) {
-      return res.status(400).json({ message: "Required fields missing" });
-    }
+    const calendar = getCalendarClient(tokens);
 
-    let calendarEvent = null;
+    const event = {
+      summary: title,
+      description,
+      start: {
+        dateTime: startTime,
+        timeZone: "Asia/Kolkata",
+      },
+      end: {
+        dateTime: endTime,
+        timeZone: "Asia/Kolkata",
+      },
+      conferenceData: {
+        createRequest: {
+          requestId: "syncaura-" + Date.now(),
+        },
+      },
+    };
 
-    try {
-      calendarEvent = await createCalendarEvent({
-        title,
-        description,
-        startTime,
-        endTime,
-      });
-    } catch (err) {
-      console.warn("Calendar sync failed:", err.message);
-    }
+    const response = await calendar.events.insert({
+      calendarId: "primary",
+      resource: event,
+      conferenceDataVersion: 1,
+    });
 
-    const meeting = await Meeting.create({
+    res.status(201).json({
       title,
       description,
       startTime,
       endTime,
-      googleEventId: calendarEvent?.id || null,
-      createdBy: req.user.id,
+      meetLink: response.data.hangoutLink,
+      eventId: response.data.id,
     });
 
-    res.status(201).json({
-      message: "Meeting created successfully",
-      meeting,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Meeting creation failed" });
   }
 };
+
 
 
 // ✅ Get all meetings

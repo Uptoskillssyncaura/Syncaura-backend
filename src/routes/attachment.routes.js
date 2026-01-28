@@ -1,8 +1,9 @@
 import express from "express";
 import { addAttachment,getAttachmentsByMeeting } from "../controllers/attachmentController.js";
+import { auth } from "../middlewares/auth.js";
 const router=express.Router();
 
-router.post("/",addAttachment);
-router.get("/:meetingId",getAttachmentsByMeeting);
+router.post("/",auth,addAttachment);
+router.get("/:meetingId",auth,getAttachmentsByMeeting);
 
 export default router;
