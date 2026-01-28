@@ -5,8 +5,8 @@ import {
   updateNotice,
   deleteNotice,
 } from "../controllers/notice.controller.js";
-import auth from "../middlewares/auth.js"; // existing authentication middleware
-import roleCheck from "../middlewares/rolecheck.js"; // restrict access to admin/coadmin
+import {auth} from "../middlewares/auth.js"; // existing authentication middleware
+// import roleCheck from "../middlewares/roleCheck.js"; // restrict access to admin/coadmin
 
 const router = express.Router();
 
@@ -14,12 +14,12 @@ const router = express.Router();
 router.get("/", auth, getAllNotices);
 
 //  Create a new notice (admin/coadmin only)
-router.post("/", auth, roleCheck, createNotice);
+// router.post("/", auth, roleCheck, createNotice);
 
 // Update a notice (admin/coadmin only)
-router.put("/:id", auth, roleCheck, updateNotice);
+// router.put("/:id", auth, roleCheck, updateNotice);
 
 // Delete a notice (admin/coadmin only)
-router.delete("/:id", auth, roleCheck, deleteNotice);
+// router.delete("/:id", auth, roleCheck, deleteNotice);
 
 export default router;

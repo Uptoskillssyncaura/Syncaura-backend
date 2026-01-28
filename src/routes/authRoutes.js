@@ -4,8 +4,8 @@ import {
   forgotPassword, resetPassword, adminOnly,
   requestPasswordOtp, changePasswordWithOtp
 } from '../controllers/authController.js';
-import  auth  from '../middlewares/auth.js';
-import  permit  from '../middlewares/role.js';
+import  {auth}  from '../middlewares/auth.js';
+import  {permit}  from '../middlewares/role.js';
 import {
   registerValidator, loginValidator, changePasswordValidator,
   forgotPasswordValidator, resetPasswordValidator,
