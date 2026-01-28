@@ -13,6 +13,9 @@ import noticeRoutes from "./routes/notice.routes.js";
 import documentRoutes from "./routes/documentRoutes.js";
 import reportRoutes from "./routes/reportRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
+
+import messageRoutes from "./routes/messageRoutes.js";
+
 import dashboardRoutes from './routes/dashboardRoutes.js';
 import leaveRoutes from './routes/leaveRoutes.js';
 import complaintRoutes from './routes/complaintRoutes.js';
@@ -22,6 +25,7 @@ import attachmentRoutes from "./routes/attachment.routes.js";
 import meetingRoutes from "./routes/meeting.routes.js";
 import calendarTestRoute from "./routes/calendarTest.route.js";
 import googleAuthRoutes from "./routes/googleAuth.route.js";
+
 
 dotenv.config();
 
@@ -52,6 +56,9 @@ app.use('/api/channels', channelRoutes);
 app.use("/api/documents", documentRoutes);
 app.use("/api/reports", reportRoutes);
 app.use("/api/projects", projectRoutes);
+
+app.use("/api/messages",messageRoutes);
+
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/leave', leaveRoutes);
 app.use('/api/complaints', complaintRoutes);
@@ -61,6 +68,7 @@ app.use("/api/notes",noteRoutes);
 app.use("/api/meetings", meetingRoutes);
 app.use("/api", calendarTestRoute);
 app.use("/auth", googleAuthRoutes);
+
 
 // Health check route
 app.get('/health', (req, res) => res.json({ status: 'ok' }));

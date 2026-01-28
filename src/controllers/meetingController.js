@@ -1,4 +1,32 @@
 import Meeting from "../models/Meetings.js";
+
+import { createCalendarEvent } from "../services/googleCalendar.js";
+import mongoose from "mongoose";
+
+// ✅ Create meeting
+export const createMeeting = async (req, res) => {
+  try {
+    const { title, description, startTime, endTime } = req.body;
+
+    if (!title || !startTime || !endTime) {
+      return res.status(400).json({ message: "Required fields missing" });
+    }
+
+    let calendarEvent = null;
+
+    try {
+      calendarEvent = await createCalendarEvent({
+        title,
+        description,
+        startTime,
+        endTime,
+      });
+    } catch (err) {
+      console.warn("Calendar sync failed:", err.message);
+    }
+
+    const meeting = await Meeting.create({
+=======
 import mongoose from "mongoose";
 
 // ✅ Create meeting
@@ -40,10 +68,28 @@ export const createMeeting = async (req, res) => {
     });
 
     res.status(201).json({
+
       title,
       description,
       startTime,
       endTime,
+
+      googleEventId: calendarEvent?.id || null,
+      createdBy: req.user.id,
+    });
+
+    res.status(201).json({
+      message: "Meeting created successfully",
+      meeting,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+
       meetLink: response.data.hangoutLink,
       eventId: response.data.id,
     });
@@ -53,6 +99,7 @@ export const createMeeting = async (req, res) => {
     res.status(500).json({ message: "Meeting creation failed" });
   }
 };
+
 
 
 
@@ -115,4 +162,8 @@ export const deleteMeeting = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+
 };
+
+};
+

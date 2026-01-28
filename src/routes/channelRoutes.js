@@ -3,6 +3,8 @@ const router = express.Router();
 
 import { auth } from "../middlewares/auth.js";
 import { permit } from "../middlewares/role.js";
+import {getChannels} from "../controllers/channelController.js";
+import {getChannelById} from "../controllers/channelController.js";
 import ROLES from "../config/roles.js";
 
 import {
@@ -14,11 +16,13 @@ import {
 router.post(
   "/",
   auth,
-  permit(ROLES.ADMIN, ROLES.CO_ADMIN),
+  
   createChannel
 );
 
 router.post("/:channelId/join", auth, joinChannel);
 router.post("/:channelId/leave", auth, leaveChannel);
+router.get("/",auth,getChannels);
+router.get("/:id",auth,getChannelById);
 
 export default router;
