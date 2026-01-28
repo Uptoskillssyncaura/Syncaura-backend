@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
+import User from '../models/User.js'; // make sure path is correct
 
-export const auth = (req, res, next) => {
+export const auth = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
     let token = null;
@@ -14,9 +15,17 @@ export const auth = (req, res, next) => {
     if (!token) return res.status(401).json({ message: 'Unauthorized' });
 
     const payload = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
-    req.user = { id: payload.sub, role: payload.role };
+
+    // Fetch full user from DB to get Google tokens
+    const user = await User.findById(payload.sub);
+    if (!user) return res.status(401).json({ message: 'User not found' });
+
+    req.user = user;                  // full user object
+    req.googleTokens = user.googleTokens; // attach Google tokens for meetings
+
     next();
   } catch (err) {
+    console.error('Auth error:', err);
     return res.status(401).json({ message: 'Invalid or expired token' });
   }
 };

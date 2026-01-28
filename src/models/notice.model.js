@@ -15,6 +15,13 @@ const noticeSchema = new mongoose.Schema(
       type: String,
       default: "Admin",
     },
+    attachments: [
+      {
+        fileName: { type: String },       // original file name
+        fileUrl: { type: String },        // path or cloud URL
+        uploadedAt: { type: Date, default: Date.now }
+      }
+    ]
   },
   { timestamps: true }
 );
@@ -22,3 +29,4 @@ const noticeSchema = new mongoose.Schema(
 const Notice = mongoose.model("Notice", noticeSchema);
 
 export default Notice;
+

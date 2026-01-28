@@ -1,4 +1,5 @@
 import Meeting from "../models/Meetings.js";
+
 import { createCalendarEvent } from "../services/googleCalendar.js";
 import mongoose from "mongoose";
 
@@ -25,10 +26,54 @@ export const createMeeting = async (req, res) => {
     }
 
     const meeting = await Meeting.create({
+=======
+import mongoose from "mongoose";
+
+// ✅ Create meeting
+import { getCalendarClient } from "../utils/googleAuth.js";
+
+export const createMeeting = async (req, res) => {
+  try {
+    const tokens = req.googleTokens;
+    if (!tokens) {
+      return res.status(403).json({ message: "Google account not connected" });
+    }
+
+    const { title, description, startTime, endTime } = req.body;
+
+    const calendar = getCalendarClient(tokens);
+
+    const event = {
+      summary: title,
+      description,
+      start: {
+        dateTime: startTime,
+        timeZone: "Asia/Kolkata",
+      },
+      end: {
+        dateTime: endTime,
+        timeZone: "Asia/Kolkata",
+      },
+      conferenceData: {
+        createRequest: {
+          requestId: "syncaura-" + Date.now(),
+        },
+      },
+    };
+
+    const response = await calendar.events.insert({
+      calendarId: "primary",
+      resource: event,
+      conferenceDataVersion: 1,
+    });
+
+    res.status(201).json({
+
       title,
       description,
       startTime,
       endTime,
+
       googleEventId: calendarEvent?.id || null,
       createdBy: req.user.id,
     });
@@ -42,6 +87,20 @@ export const createMeeting = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+
+
+      meetLink: response.data.hangoutLink,
+      eventId: response.data.id,
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Meeting creation failed" });
+  }
+};
+
+
 
 
 // ✅ Get all meetings
@@ -103,4 +162,8 @@ export const deleteMeeting = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+
 };
+
+};
+

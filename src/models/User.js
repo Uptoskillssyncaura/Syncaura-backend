@@ -13,6 +13,14 @@ const userSchema = new mongoose.Schema({
   enum:rolesEnum,
   default: "user"
 },
+googleTokens: {
+  access_token: String,
+  refresh_token: String,
+  scope: String,
+  token_type: String,
+  expiry_date: Number,
+},
+
 
   isActive: { type: Boolean, default: true },
   // Password reset
@@ -26,7 +34,7 @@ const userSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // Indexes
-userSchema.index({ email: 1 }, { unique: true });
+// userSchema.index({ email: 1 }, { unique: true });
 
 // Methods
 userSchema.methods.comparePassword = async function (candidatePassword) {
