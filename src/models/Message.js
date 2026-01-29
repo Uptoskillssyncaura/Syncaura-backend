@@ -9,11 +9,27 @@ const messageSchema = new mongoose.Schema({
   senderId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
+    required: true,
   },
   text: {
     type: String,
     required: true,
   },
+  messageType:{
+    type:String,
+    enum:["text","image","file","audio"],
+    default:"text",
+  },
+  fileUrl:{
+    type:String,
+    default:null,
+  },
+  seenBy:[
+    {
+      type:mongoose.Schema.Types.ObjectId,
+      ref:"User",
+    },
+  ],
 }, { timestamps: true });
 
 export default mongoose.model("Message", messageSchema);

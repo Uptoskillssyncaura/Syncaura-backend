@@ -38,7 +38,9 @@ console.log("Channel ID:", channelId);
     if (!channel) {
       return res.status(404).json({ message: "Channel not found" });
     }
-
+   if (!channel.isPublic) {
+      return res.status(403).json({ message: "Private channel" });
+    }
     if (channel.members.length >= channel.maxMembers) {
       return res.status(403).json({
         message: "Channel is full (max 5 users)",
@@ -82,6 +84,54 @@ export const leaveChannel = async (req, res) => {
     });
 
     res.json({ message: "Left channel successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
+export const createPrivateChat = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { otherUserId } = req.body;
+
+    if (!otherUserId) {
+      return res.status(400).json({ message: "Other user required" });
+    }
+
+    // Check if private chat already exists
+    const existingChat = await Channel.findOne({
+      isPrivate: true,
+      allowedUsers: { $all: [userId, otherUserId] },
+    });
+
+    if (existingChat) {
+      return res.status(200).json(existingChat);
+    }
+
+    const channel = await Channel.create({
+      name: "private-chat",
+      isPrivate: true,
+      members: [userId, otherUserId],
+      allowedUsers: [userId, otherUserId],
+      maxMembers: 2,
+    });
+
+    res.status(201).json(channel);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// ✅ Get all public channels
+export const getPublicChannels = async (req, res) => {
+  try {
+    const channels = await Channel.find({
+      isPublic: true,
+      isPrivate: false,
+    }).select("-allowedUsers");
+
+    res.status(200).json(channels);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

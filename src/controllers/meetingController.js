@@ -1,6 +1,5 @@
 import Meeting from "../models/Meetings.js";
 import mongoose from "mongoose";
-
 // ✅ Create meeting
 import { getCalendarClient } from "../utils/googleAuth.js";
 
