@@ -28,7 +28,6 @@ export const createMeeting = async (req, res) => {
     const meeting = await Meeting.create({
 =======
 import mongoose from "mongoose";
-
 // ✅ Create meeting
 import { getCalendarClient } from "../utils/googleAuth.js";
 

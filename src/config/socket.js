@@ -5,7 +5,19 @@ const socketHandler = (io) => {
   io.on("connection", (socket) => {
     console.log("User connected:", socket.id);
 
-    socket.on("join-channel", (channelId) => {
+    socket.on("join-channel", async({channelId,userId }) => {
+      const channel = await Channel.findById(channelId);
+      if(!channel){
+        socket.emit("error","Channel not found");
+        return;
+      }
+      if(
+        channel.isPrivate &&
+        !channel.allowedUsers.includes(userId)
+      ){
+        socket.emit("error","Not allowed to join this private chat");
+        return;
+      }
       socket.join(channelId);
     });
 
@@ -13,10 +25,29 @@ const socketHandler = (io) => {
       socket.leave(channelId);
     });
 
+
     socket.on("send-message", async ({ channelId, senderId, content }) => {
       try {
         // 1️⃣ Validate message content
         if (!content || content.trim() === "") return;
+
+    socket.on("send-message", async ({ channelId, senderId, text }) => {
+      const channel=await Channel.findById(channelId);
+      if(!channel)return;
+      if(channel.isPrivate && !channel.allowedUsers.includes(senderId))
+      {
+        socket.emit("error","Not allowed to send message");
+        return;
+      }
+      
+      
+      const message = await Message.create({
+        channelId,
+        senderId,
+        text,
+        messageType:"text",
+      });
+
 
         // 2️⃣ Check channel exists
         const channel = await Channel.findById(channelId);
@@ -38,6 +69,23 @@ const socketHandler = (io) => {
       } catch (error) {
         console.error("Socket send-message error:", error);
       }
+    });
+
+    socket.on("send-media-message",async({channelId,senderId,fileUrl}) =>{
+      const channel=await Channel.findById(channelId);
+      if(!channel)return;
+      if(channel.isPrivate && !channel.allowedUsers.includes(senderId))
+      {
+        socket.emit("error","Not allowed");
+        return;
+      }
+      const message=await message.create({
+        channelId,
+        senderId,
+        messageType:"file",
+        fileUrl,
+      });
+      io.to(channelId).emit("new-message",message);
     });
 
     socket.on("disconnect", () => {

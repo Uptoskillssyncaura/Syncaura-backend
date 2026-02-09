@@ -1,6 +1,5 @@
 import express from "express";
 const router = express.Router();
-
 import { auth } from "../middlewares/auth.js";
 import { permit } from "../middlewares/role.js";
 import {getChannels} from "../controllers/channelController.js";
@@ -11,6 +10,7 @@ import {
   createChannel,
   joinChannel,
   leaveChannel,
+  getPublicChannels
 } from "../controllers/channelController.js";
 
 router.post(
