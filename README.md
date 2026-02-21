@@ -252,6 +252,10 @@ EMAIL_PASS=your-app-password
 GOOGLE_CLIENT_ID=your-google-client-id
 GOOGLE_CLIENT_SECRET=your-google-client-secret
 GOOGLE_REDIRECT_URI=http://localhost:5000/api/auth/google/callback
+
+# Zoom API (for generating meeting links)
+ZOOM_API_KEY=your-zoom-api-key
+ZOOM_API_SECRET=your-zoom-api-secret
 ```
 
 ### 4️⃣ Run the Development Server

@@ -26,12 +26,31 @@ const meetingSchema = new mongoose.Schema(
       default: [],
     },
 
+    // which platform the meeting is scheduled on
+    platform: {
+      type: String,
+      enum: ["Google Meet", "Zoom", "Teams"],
+      default: "Google Meet",
+    },
+
+    // fields used when a Google meeting is created
     googleEventId: {
       type: String,
     },
     googleMeetLink: {
-  type: String,
-},
+      type: String,
+    },
+
+    // fields used when a Zoom meeting is created
+    zoomMeetingId: {
+      type: String,
+    },
+    zoomPassword: {
+      type: String,
+    },
+    zoomJoinUrl: {
+      type: String,
+    },
 
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
