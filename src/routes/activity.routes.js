@@ -1,11 +1,11 @@
-const express = require("express");
+import express from "express";
+import auth from "../middleware/auth.middleware.js";
+import * as controller from "../controllers/activity.controller.js";
+
 const router = express.Router();
-const auth = require("../middleware/auth.middleware");
-const controller = require("../controllers/activity.controller");
 
 router.post("/log", auth, controller.logActivity);
 router.get("/", auth, controller.getActivities);
 router.get("/test", controller.testData);
 
-module.exports = router;
-public.key  
+export default router;

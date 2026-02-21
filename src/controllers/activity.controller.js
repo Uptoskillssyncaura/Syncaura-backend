@@ -1,6 +1,6 @@
-const Activity = require("../models/Activity.model");
+import Activity from "../models/Activity.model.js";
 
-exports.logActivity = async (req, res) => {
+export const logActivity = async (req, res) => {
   try {
     const { eventType } = req.body;
 
@@ -16,7 +16,7 @@ exports.logActivity = async (req, res) => {
   }
 };
 
-exports.getActivities = async (req, res) => {
+export const getActivities = async (req, res) => {
   try {
     let filter = {};
 
@@ -25,21 +25,26 @@ exports.getActivities = async (req, res) => {
     }
 
     const activities = await Activity.find(filter).sort({ createdAt: -1 });
+
     res.json(activities);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
-exports.testData = async (req, res) => {
-  await Activity.create({
-    userId: "USER_001",
-    role: "EMPLOYEE",
-    eventType: "LOGIN",
-  });
 
-  res.json({
-    success: true,
-    message: "Sample activity inserted successfully"
-  });
+export const testData = async (req, res) => {
+  try {
+    await Activity.create({
+      userId: "USER_001",
+      role: "EMPLOYEE",
+      eventType: "LOGIN",
+    });
+
+    res.json({
+      success: true,
+      message: "Sample activity inserted successfully",
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
-
