@@ -252,6 +252,10 @@ EMAIL_PASS=your-app-password
 GOOGLE_CLIENT_ID=your-google-client-id
 GOOGLE_CLIENT_SECRET=your-google-client-secret
 GOOGLE_REDIRECT_URI=http://localhost:5000/api/auth/google/callback
+
+# Canva API Configuration
+CANVA_ACCESS_TOKEN=your_canva_access_token_here
+CANVA_API_BASE=https://api.canva.com/rest/v1
 ```
 
 ### 4️⃣ Run the Development Server
