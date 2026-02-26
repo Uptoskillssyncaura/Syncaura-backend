@@ -252,6 +252,10 @@ EMAIL_PASS=your-app-password
 GOOGLE_CLIENT_ID=your-google-client-id
 GOOGLE_CLIENT_SECRET=your-google-client-secret
 GOOGLE_REDIRECT_URI=http://localhost:5000/api/auth/google/callback
+
+# Zoom API (for generating meeting links)
+ZOOM_API_KEY=your-zoom-api-key
+ZOOM_API_SECRET=your-zoom-api-secret
 ```
 
 ### 4️⃣ Run the Development Server
@@ -312,7 +316,19 @@ npm run run
 
 ### Meeting Routes (`/api/meetings`)
 - `GET /api/meetings` - Get all meetings
-- `POST /api/meetings` - Schedule a new meeting
+- `POST /api/meetings` - Schedule a new meeting. Body should include at least:
+  ```json
+  {
+    "title": "Standup",
+    "startTime": "2025-12-17T10:00:00Z",
+    "endTime": "2025-12-17T10:30:00Z",
+    "platform": "Zoom"      // optional: "Google Meet" (default), "Zoom" or "Teams"
+  }
+  ```
+  When `platform` is `Zoom` the server will generate a Zoom meeting using
+  the Zoom API and save the `zoomMeetingId`, `zoomPassword` and `zoomJoinUrl`
+  in the database. For Google Meet the meeting will be created on the
+  user's connected Google account.
 - `GET /api/meetings/:id` - Get meeting by ID
 - `PUT /api/meetings/:id` - Update meeting
 - `DELETE /api/meetings/:id` - Cancel meeting
