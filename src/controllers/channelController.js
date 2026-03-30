@@ -1,7 +1,7 @@
 import Channel from "../models/Channel.js";
 import User from "../models/User.js";
 
-// Create Channel (Admin / Co-Admin)
+
 export const createChannel = async (req, res) => {
   try {
     const { name } = req.body;
@@ -33,6 +33,7 @@ export const joinChannel = async (req, res) => {
 console.log("User trying to join:", userId);
 console.log("Channel ID:", channelId);
 
+   
     const channel = await Channel.findById(channelId);
       console.log("Found channel:", channel);
     if (!channel) {
@@ -69,6 +70,14 @@ console.log("Current members:", channel.members.map(m => m.toString()));
   }
 };
 
+ export const getChannels=async (req,res)=>{
+      const channels=await Channel.find({
+        members:req.user.id
+      });
+      res.status(200).json(channels);
+    };
+
+
 // Leave Channel
 export const leaveChannel = async (req, res) => {
   try {
@@ -89,6 +98,21 @@ export const leaveChannel = async (req, res) => {
   }
 };
 
+
+
+//find By id
+
+export const getChannelById=async (req,res)=>{
+  try{
+    const channel=await Channel.findById(req.params.id);
+    if(!channel){
+      return res.status(404).json({message:"Channel not found"});
+   }
+  }catch(err){
+  res.status(500).json({message:err.message});
+  }
+
+}
 
 export const createPrivateChat = async (req, res) => {
   try {
@@ -136,3 +160,4 @@ export const getPublicChannels = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+

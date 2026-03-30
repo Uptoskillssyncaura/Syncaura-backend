@@ -25,6 +25,12 @@ const socketHandler = (io) => {
       socket.leave(channelId);
     });
 
+
+    socket.on("send-message", async ({ channelId, senderId, content }) => {
+      try {
+        // 1️⃣ Validate message content
+        if (!content || content.trim() === "") return;
+
     socket.on("send-message", async ({ channelId, senderId, text }) => {
       const channel=await Channel.findById(channelId);
       if(!channel)return;
@@ -42,7 +48,27 @@ const socketHandler = (io) => {
         messageType:"text",
       });
 
-      io.to(channelId).emit("new-message", message);
+
+        // 2️⃣ Check channel exists
+        const channel = await Channel.findById(channelId);
+        if (!channel) return;
+
+        // 3️⃣ Check user is channel member
+        if (!channel.members.includes(senderId)) return;
+
+        // 4️⃣ Save message to DB
+        const message = await Message.create({
+          channelId,
+          senderId,
+          content,
+        });
+
+        // 5️⃣ Emit message to channel room
+        io.to(channelId).emit("new-message", message);
+
+      } catch (error) {
+        console.error("Socket send-message error:", error);
+      }
     });
 
     socket.on("send-media-message",async({channelId,senderId,fileUrl}) =>{
@@ -63,7 +89,7 @@ const socketHandler = (io) => {
     });
 
     socket.on("disconnect", () => {
-      console.log("User disconnected");
+      console.log("User disconnected:", socket.id);
     });
   });
 };

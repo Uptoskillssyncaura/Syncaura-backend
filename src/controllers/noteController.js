@@ -1,5 +1,7 @@
 import Note from "../models/Note.js";
 import mongoose from "mongoose";
+
+
 import Meeting from "../models/Meetings.js";
 
 
@@ -11,11 +13,13 @@ export const addNote = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(meetingId)) {
       return res.status(400).json({ message: "Invalid meetingId" });
     }
+
     
     const meeting = await Meeting.findById(meetingId);
 if (!meeting) {
   return res.status(404).json({ message: "Meeting not found" });
 }
+
 
 
     if (!content) {
@@ -45,4 +49,8 @@ export const getNotesByMeeting = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
+
 };
+
+};
+
