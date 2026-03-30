@@ -1,5 +1,5 @@
 {
-  "name": "meet-backend",
+  "name": "outlook-sync",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,9 +11,9 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "body-parser": "^2.2.2",
+    "@azure/msal-node": "^5.0.6",
+    "axios": "^1.13.6",
     "dotenv": "^17.3.1",
-    "express": "^5.2.1",
-    "googleapis": "^171.4.0"
+    "express": "^5.2.1"
   }
 }
