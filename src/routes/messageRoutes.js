@@ -9,10 +9,8 @@ router.post("/", auth, sendMessage);
 router.get("/:channelId", auth, getMessages);
 
 import upload from "../middlewares/upload.js";
-import { sendMediaMessage } from "../controllers/messageController.js";
-import { auth } from "../middlewares/auth.js";
+import { sendMediaMessage } from "../controllers/messageController.js"
 
-const router=express.Router();
 router.post(
     "/send-media",
     auth,

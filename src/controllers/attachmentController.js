@@ -50,5 +50,4 @@ export const getAttachmentsByMeeting = async (req, res) => {
 
 };
 
-};
 
