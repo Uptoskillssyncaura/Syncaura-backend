@@ -1,4 +1,3 @@
-
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -32,16 +31,15 @@ const calendar = google.calendar({
   auth: oAuth2Client,
 });
 
-import { google } from "googleapis";
-import { getCalendarClient } from "../utils/googleAuth.js";
+// import { google } from "googleapis";
+// import { getCalendarClient } from "../utils/googleAuth.js";
 
-
+/* ------------------ CREATE EVENT ------------------ */
 export const createCalendarEvent = async ({
   title,
   description,
   startTime,
   endTime,
-
   participants = [],
 }) => {
   const event = await calendar.events.insert({
@@ -64,8 +62,7 @@ export const createCalendarEvent = async ({
   return event.data;
 };
 
-/*                 UPDATE CALENDAR EVENT                 */
-
+/* ------------------ UPDATE CALENDAR EVENT ------------------ */
 export const updateCalendarEvent = async (eventId, data) => {
   const event = await calendar.events.patch({
     calendarId: "primary",
@@ -82,43 +79,16 @@ export const updateCalendarEvent = async (eventId, data) => {
         timeZone: "Asia/Kolkata",
       },
       attendees: data.participants?.map((email) => ({ email })),
-
-}) => {
-  const auth = getCalendarClient();
-
-  const calendar = google.calendar({
-    version: "v3",
-    auth,
-  });
-
-  const event = await calendar.events.insert({
-    calendarId: "primary",
-    conferenceDataVersion: 1,
-    requestBody: {
-      summary: title,
-      description,
-      start: { dateTime: startTime },
-      end: { dateTime: endTime },
-      conferenceData: {
-        createRequest: {
-          requestId: Date.now().toString(),
-          conferenceSolutionKey: {
-            type: "hangoutsMeet",
-          },
-        },
-      },    },
+    },
   });
 
   return event.data;
 };
 
-
-
+/* ------------------ DELETE EVENT ------------------ */
 export const deleteCalendarEvent = async (eventId) => {
   await calendar.events.delete({
     calendarId: "primary",
     eventId,
   });
 };
-
-

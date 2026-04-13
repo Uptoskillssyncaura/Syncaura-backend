@@ -64,6 +64,7 @@ export const getMessages = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
+};
 
 export const sendMediaMessage = async (req,res)=>{
     try{
@@ -74,8 +75,7 @@ export const sendMediaMessage = async (req,res)=>{
         if(!channel){
             return res.status(404).json({message:"Channel not found"});
         }
-        if(channel.isPrivate && !channel.allowedUsers.includes(senderId))
-        {
+        if(channel.isPrivate && !channel.allowedUsers.includes(senderId)){
             return res.status(403).json({message:"Not allowed"});
         }
 
@@ -88,6 +88,5 @@ export const sendMediaMessage = async (req,res)=>{
         res.status(201).json(message);
     }catch(err){
         res.status(500).json({message:err.message});
-    }
-
-};
+    } 
+ };

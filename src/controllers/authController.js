@@ -3,9 +3,10 @@ import jwt from 'jsonwebtoken';
 import { validationResult } from 'express-validator';
 import User from '../models/User.js';
 import { generateAccessToken, generateRefreshToken, assignRefreshId } from '../utils/generateTokens.js';
-import { sendResetEmail } from '../utils/email.js';
+import { sendEmail, sendResetEmail } from '../utils/email.js';
 import { generateOtp } from '../utils/otp.js';
 import ROLES from "../config/roles.js";
+
 
 const handleValidation = (req) => {
   const errors = validationResult(req);
@@ -26,22 +27,27 @@ export const register = async (req, res, next) => {
     if (existing) return res.status(409).json({ message: 'Email already registered' });
 
     const passwordHash = await User.hashPassword(password);
-  const allowedRoles = Object.values(ROLES);
-const finalRole = allowedRoles.includes(role) ? role : ROLES.USER;
+    const allowedRoles = Object.values(ROLES);
+    const finalRole = allowedRoles.includes(role) ? role : ROLES.USER;
 
-const user = await User.create({
-  name,
-  email,
-  passwordHash,
-  role: finalRole
-});
-
-    
+    const user = await User.create({
+      name,
+      email,
+      passwordHash,
+      role: finalRole
+    });
 
     const rid = assignRefreshId(user);
     await user.save();
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user, rid);
+
+    // 🔥 SMTP ALERT TRIGGER
+    await sendEmail(
+      email,
+      "Welcome to Syncaura 🎉",
+      `<h2>Welcome ${name}</h2>`
+    );
 
     res.status(201).json({
       user: { id: user._id, name: user.name, email: user.email, role: user.role },
@@ -128,6 +134,13 @@ export const requestPasswordOtp = async (req, res, next) => {
     console.log(`Generated OTP for ${user.email}: ${otp}`);
 
     res.json({ message: 'OTP generated (printed in server console)' });
+
+    // 🔥 SMTP ALERT
+    await sendPasswordOtpEmail({
+      to: user.email,
+      name: user.name,
+      otp
+    });
   } catch (err) { next(err); }
 };
 
@@ -152,6 +165,12 @@ export const changePasswordWithOtp = async (req, res, next) => {
     user.otpExpiresAt = null;
     user.refreshTokenId = null; // invalidate refresh
     await user.save();
+    // after password updated
+
+    await sendPasswordChangedEmail({
+      to: user.email,
+      name: user.name
+    });
 
     res.json({ message: 'Password changed successfully' });
   } catch (err) { next(err); }
