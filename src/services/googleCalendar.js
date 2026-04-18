@@ -1,4 +1,3 @@
-
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -31,10 +30,6 @@ const calendar = google.calendar({
   version: "v3",
   auth: oAuth2Client,
 });
-
-import { google } from "googleapis";
-import { getCalendarClient } from "../utils/googleAuth.js";
-
 
 export const createCalendarEvent = async ({
   title,
@@ -120,5 +115,3 @@ export const deleteCalendarEvent = async (eventId) => {
     eventId,
   });
 };
-
-

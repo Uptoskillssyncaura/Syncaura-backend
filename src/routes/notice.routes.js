@@ -11,7 +11,7 @@ import {
 } from "../controllers/notice.controller.js";
 
 import {auth} from "../middlewares/auth.js"; // existing authentication middleware
-import roleCheck from "../middlewares/roleCheck.js"; // restrict access to admin/coadmin
+// import roleCheck from "../middlewares/roleCheck.js"; // restrict access to admin/coadmin
 
 import { permit } from "../middlewares/role.js"; // restrict access to admin/coadmin
 import upload from "../middlewares/upload.js";   // Multer middleware
@@ -24,13 +24,13 @@ router.get("/", auth, getAllNotices);
 
 
  //Create a new notice (admin/coadmin only)
-router.post("/", auth, roleCheck, createNotice);
+// router.post("/", auth, roleCheck, createNotice);
 
-//Update a notice (admin/coadmin only)
-router.put("/:id", auth, roleCheck, updateNotice);
+// //Update a notice (admin/coadmin only)
+// router.put("/:id", auth, roleCheck, updateNotice);
 
- //Delete a notice (admin/coadmin only)
- router.delete("/:id", auth, roleCheck, deleteNotice);
+//  //Delete a notice (admin/coadmin only)
+//  router.delete("/:id", auth, roleCheck, deleteNotice);
 
 // Get a specific notice by ID (any authenticated user)
 router.get("/:id", auth, getNoticeById);

@@ -16,9 +16,9 @@ export const addNote = async (req, res) => {
 
     
     const meeting = await Meeting.findById(meetingId);
-if (!meeting) {
-  return res.status(404).json({ message: "Meeting not found" });
-}
+    if (!meeting) {
+    return res.status(404).json({ message: "Meeting not found" });
+    }
 
 
 
@@ -49,8 +49,6 @@ export const getNotesByMeeting = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-
-};
 
 };
 
