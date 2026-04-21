@@ -25,6 +25,7 @@ import attachmentRoutes from "./routes/attachment.routes.js";
 import meetingRoutes from "./routes/meeting.routes.js";
 import calendarTestRoute from "./routes/calendarTest.route.js";
 import googleAuthRoutes from "./routes/googleAuth.route.js";
+import canvaRoutes from "./routes/canvaRoutes.js";
 import githubRoutes from "./routes/github.routes.js";
 import { initSlackBot } from "./services/slackBot.js";
 
@@ -72,6 +73,7 @@ app.use("/api/meetings", meetingRoutes);
 app.use("/api", calendarTestRoute);
 app.use("/auth", googleAuthRoutes);
 app.use("/api/messages", messageRoutes);
+app.use("/api/canva", canvaRoutes);
 
 app.use("/api/github", githubRoutes);
 
