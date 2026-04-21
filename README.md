@@ -93,6 +93,7 @@ BACKEND/
 │   ├── services/                   # External service integrations
 │   │   ├── githubAPI.js            # GitHub API integration
 │   │   └── googleCalendar.js       # Google Calendar integration
+│   │   └── slackBot.js             # Slack Bot integration
 │   │
 │   ├── utils/                      # Utility/helper functions
 │   │   ├── email.js                # Email handling utilities
