@@ -1,7 +1,7 @@
 import express from "express";
 
 import Meeting from "../models/Meetings.js";
-import { createMeeting ,updateMeeting,deleteMeeting} from "../controllers/meetingController.js";
+import { createMeeting ,updateMeeting,deleteMeeting, getMeetings, getMeetingById} from "../controllers/meetingController.js";
 import {auth} from "../middlewares/auth.js";
 
 const router = express.Router();
