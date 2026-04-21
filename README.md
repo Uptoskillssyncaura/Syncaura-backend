@@ -14,75 +14,111 @@ This section explains the backend folder structure and the purpose of each direc
 BACKEND/
 │
 ├── src/
-│   ├── app.js                    # Express app configuration and middleware setup
-│   ├── server.js                 # HTTP server setup with Socket.IO initialization
-│   │
 │   ├── config/                   # Configuration files
 │   │   ├── db.js                 # MongoDB connection setup
 │   │   ├── socket.js             # Socket.IO event handlers
-│   │   └── roles.js              # Role-based access control configuration
-│   │
-│   ├── controllers/              # Business logic handlers
-│   │   ├── authController.js     # Authentication & authorization
-│   │   ├── taskController.js     # Task management
-│   │   ├── projectController.js  # Project management
-│   │   ├── channelController.js  # Channel/chat management
-│   │   ├── documentController.js # Document management
-│   │   ├── meetingController.js  # Meeting scheduling & management
-│   │   ├── noticeController.js   # Notice/announcement management
-│   │   ├── leaveController.js    # Leave request management
-│   │   ├── dashboardController.js # Dashboard statistics
-│   │   ├── reportController.js   # Report generation
-│   │   ├── noteController.js     # Notes management
-│   │   └── attachmentController.js # File attachment handling
-│   │
+│   │   ├── roles.js              # Role-based access control configuration
+# │   │   └── googleAuth.js         # Google OAuth / Calendar config (extra in repo)
+│
+│   ├── controllers/                      # Business logic handlers
+│   │   ├── attachmentController.js       # File attachment handling
+│   │   ├── authController.js             # Authentication & authorization
+│   │   ├── channelController.js          # Channel/chat management
+│   │   ├── complaintController.js        # Complaint management
+│   │   ├── dashboardController.js        # Dashboard statistics
+│   │   ├── documentController.js         # Document management
+│   │   ├── leaveController.js            # Leave request management
+│   │   ├── meetingController.js          # Meeting scheduling & management
+│   │   ├── messageController.js          # Message handling for real-time chat
+│   │   ├── noteController.js             # Notes management
+│   │   ├── notice.controller.js          # Notice/announcement management
+│   │   ├── notificationController.js     # Notification management
+│   │   ├── projectController.js          # Project management
+│   │   ├── reportController.js           # Report generation
+│   │   └── task.controller.js            # Task management
+│ 
+│   ├── features/                 # Feature-based state management (frontend-related logic)
+│   │   └── auth/
+│   │       └── authSlice.js      # Authentication state management
+│
+│   ├── middlewares/              # Express middleware
+│   │   ├── auth.js               # JWT authentication middleware
+│   │   ├── errorHandler.js       # Global error handling middleware
+│   │   ├── role.js               # Role-based access control middleware
+│   │   └── upload.js             # File upload middleware
+│
 │   ├── models/                   # Mongoose schema definitions
-│   │   ├── User.js               # User model with authentication
+│   │   ├── Attachment.js         # Attachment model
+│   │   ├── Channel.js            # Channel model
+│   │   ├── Complaint.js          # Complaint model
+│   │   ├── Document.js           # Document model
+│   │   ├── Leave.js              # Leave model
+│   │   ├── Meetings.js           # Meeting model
+│   │   ├── Message.js            # Message model for real-time chat
+│   │   ├── Note.js               # Note model
+│   │   ├── notice.model.js       # Notice model
+│   │   ├── Notification.js       # Notification model
 │   │   ├── Project.js            # Project model
 │   │   ├── task.model.js         # Task model
-│   │   ├── Channel.js            # Channel model
-│   │   ├── Message.js            # Message model for real-time chat
-│   │   ├── Document.js           # Document model
-│   │   ├── Meetings.js           # Meeting model
-│   │   ├── notice.model.js       # Notice model
-│   │   ├── Leave.js              # Leave model
-│   │   ├── Note.js               # Note model
-│   │   └── Attachment.js         # Attachment model
-│   │
-│   ├── routes/                   # API route definitions
-│   │   ├── authRoutes.js         # Authentication routes
-│   │   ├── task.routes.js        # Task routes
-│   │   ├── projectRoutes.js      # Project routes
-│   │   ├── channelRoutes.js      # Channel routes
-│   │   ├── documentRoutes.js     # Document routes
-│   │   ├── meeting.routes.js     # Meeting routes
-│   │   ├── notice.routes.js      # Notice routes
-│   │   ├── leaveRoutes.js        # Leave routes
-│   │   ├── dashboardRoutes.js    # Dashboard routes
-│   │   ├── reportRoutes.js       # Report routes
-│   │   ├── note.routes.js        # Note routes
-│   │   ├── attachment.routes.js  # Attachment routes
-│   │   └── calendarTest.route.js # Google Calendar integration routes
-│   │
+│   │   ├── upload.js             # Upload/file metadata model
+│   │   └── User.js               # User model with authentication
+│
+│   ├── routes/                      # API route definitions
+│   │   ├── attachment.routes.js     # Attachment routes
+│   │   ├── authRoutes.js            # Authentication routes
+│   │   ├── calendarTest.route.js    # Google Calendar test routes
+│   │   ├── channelRoutes.js         # Channel routes
+│   │   ├── complaintRoutes.js       # Complaint routes
+│   │   ├── dashboardRoutes.js       # Dashboard routes
+│   │   ├── documentRoutes.js        # Document routes
+│   │   ├── github.routes.js         # GitHub integration routes
+│   │   ├── googleAuth.route.js      # Google OAuth routes (variant 1)
+│   │   ├── googleAuthRoutes.js      # Google OAuth routes (variant 2)
+│   │   ├── leaveRoutes.js           # Leave routes
+│   │   ├── meeting.routes.js        # Meeting routes
+│   │   ├── messageRoutes.js         # Messaging routes
+│   │   ├── note.routes.js           # Note routes
+│   │   ├── notice.routes.js         # Notice routes
+│   │   ├── notificationRoutes.js    # Notification routes
+│   │   ├── projectRoutes.js         # Project routes
+│   │   ├── reportRoutes.js          # Report routes
+│   │   └── task.routes.js           # Task routes
+│
 │   ├── middlewares/              # Express middleware
 │   │   ├── auth.js               # JWT authentication middleware
 │   │   ├── role.js               # Role-based access control middleware
-│   │   └── errorHandler.js       # Global error handling middleware
+│   │   ├── errorHandler.js       # Global error handling middleware
+│   │   └── upload.js             # File upload middleware (extra)
+│
+│   ├── services/                   # External service integrations
+│   │   ├── githubAPI.js            # GitHub API integration
+│   │   └── googleCalendar.js       # Google Calendar integration
 │   │
-│   ├── services/                 # External service integrations
-│   │   └── googleCalendar.js     # Google Calendar API service
+│   ├── utils/                      # Utility/helper functions
+│   │   ├── email.js                # Email handling utilities
+│   │   ├── exportUtils.js          # Data export utilities
+│   │   ├── generateToken.js        # Token generation helper
+│   │   ├── generateTokens.js       # Multiple token generation logic
+│   │   ├── googleAuth.js           # Google authentication helper
+│   │   ├── notifications.js        # Notification utilities
+│   │   └── otp.js                  # OTP generation/verification
 │   │
-│   ├── utils/                    # Utility functions
-│   │   └── [utility files]       # Helper functions and utilities
+│   ├── validators/                 # Request validation logic
+│   │   └── authValidators.js       # Authentication validators
 │   │
-│   └── validators/               # Input validation schemas
-│       └── [validator files]     # Express-validator schemas
+│   ├── app.js                      # Express app configuration
+│   └── server.js                   # Server entry point
 │
 ├── public/                       # Static files (if any)
-├── node_modules/                 # Dependencies (ignored in Git)
+├── outlook-sync/               # Outlook synchronization module
+│
+├── .env                          # Environment variables
+├── .gitignore                    # Git ignore rules
+└── database.json                 # Database mock / local JSON storage
+└── index.js                      # Entry point (sometimes duplicated in root in repo)
 ├── package.json                  # Project dependencies and scripts
 ├── package-lock.json             # Locked dependency versions
-└── README.md                     # This file
+├── README.md                     # This file
 ```
 
 ---
@@ -228,36 +264,48 @@ Create a `.env` file in the root directory:
 PORT=5000
 NODE_ENV=development
 
-# MongoDB Configuration
-MONGO_URI=mongodb://localhost:27017/clustername
-# OR for MongoDB Atlas:
-# MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/clustername
+# Database
+MONGO_URI=mongodb+srv://<DB_USER>:<DB_PASS>@cluster0.mongodb.net/<DB_NAME>
 
-# JWT Configuration
-JWT_SECRET=your-super-secret-jwt-key-here
-JWT_EXPIRE=7d
-REFRESH_TOKEN_SECRET=your-refresh-token-secret
-REFRESH_TOKEN_EXPIRE=30d
+# Auth
+JWT_SECRET=your_jwt_secret_here
+JWT_ACCESS_SECRET=your_jwt_access_secret_here
+JWT_REFRESH_SECRET=your_jwt_refresh_secret_here
+JWT_ACCESS_EXPIRES=15m
+JWT_REFRESH_EXPIRES=7d
 
-# Client Configuration
-CLIENT_URL=http://localhost:5173
+# Reset password
+RESET_TOKEN_SECRET=your_reset_token_secret_here
+RESET_TOKEN_EXPIRES_MIN=15
 
-# Email Configuration (for Nodemailer)
-EMAIL_HOST=smtp.gmail.com
+# Email (Ethereal for dev)
+EMAIL_HOST=smtp.ethereal.email
 EMAIL_PORT=587
-EMAIL_USER=your-email@gmail.com
-EMAIL_PASS=your-app-password
+EMAIL_USER=your_ethereal_username
+EMAIL_PASS=your_ethereal_password
+EMAIL_FROM=your_ethereal_email@example.com
 
-# Google Calendar API (optional)
-GOOGLE_CLIENT_ID=your-google-client-id
-GOOGLE_CLIENT_SECRET=your-google-client-secret
-GOOGLE_REDIRECT_URI=http://localhost:5000/api/auth/google/callback
+# Client
+CLIENT_URL=http://localhost:3000
+
+# Google Calendar (optional)
+GOOGLE_CALENDAR_ENABLED=false
+GOOGLE_CALENDAR_ID=primary
+GOOGLE_SERVICE_ACCOUNT_KEY=path/to/service-account.json
+
+# Server Authentication
+RESET_TOKEN_SECRET=your_reset_token_secret_here
+RESET_TOKEN_EXPIRES_MIN=your_reset_token_expires_in_minutes_here
+JWT_ACCESS_SECRET=your_jwt_access_secret_here
+JWT_ACCESS_EXPIRES=your_jwt_access_expires_in_minutes_here
+JWT_REFRESH_SECRET=your_jwt_refresh_secret_here
+JWT_REFRESH_EXPIRES=your_jwt_refresh_expires_in_minutes_here
 ```
 
 ### 4️⃣ Run the Development Server
 
 ```bash
-npm run dev
+npm run start
 ```
 
 The server will start on `http://localhost:5000` (or the port specified in `.env`).
@@ -389,7 +437,7 @@ npm run run
 
 ```bash
 # Development
-npm run dev          # Start development server with nodemon
+npm run start        # Start development server with nodemon
 
 # Production
 npm run run          # Start production server

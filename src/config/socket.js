@@ -25,56 +25,48 @@ const socketHandler = (io) => {
       socket.leave(channelId);
     });
 
+    // Handle text messages
+    socket.on("message:text", async ({ channelId, senderId, text }) => {
+    const channel = await Channel.findById(channelId);
+    if (!channel) return;
 
-    socket.on("send-message", async ({ channelId, senderId, content }) => {
-      try {
-        // 1️⃣ Validate message content
-        if (!content || content.trim() === "") return;
+    if (channel.isPrivate && !channel.allowedUsers.includes(senderId)) {
+      socket.emit("error", "Not allowed to send message");
+      return;
+    }
 
-        const channel = await Channel.findById(channelId);
-        if (!channel) return;
-        if (channel.isPrivate && !channel.allowedUsers.includes(senderId)) {
-          socket.emit("error", "Not allowed to send message");
-          return;
-        }
-
-        // 3️⃣ Check user is channel member
-        if (!channel.members.includes(senderId)) return;
-
-        // 4️⃣ Save message to DB
-        const message = await Message.create({
-          channelId,
-          senderId,
-          content,
-        });
-
-        // 5️⃣ Emit message to channel room
-        io.to(channelId).emit("new-message", message);
-
-      } catch (error) {
-        console.error("Socket send-message error:", error);
-      }
+    const message = await Message.create({
+      channelId,
+      senderId,
+      text,
+      messageType: "text",
     });
 
-    socket.on("send-media-message",async({channelId,senderId,fileUrl}) =>{
-      const channel=await Channel.findById(channelId);
-      if(!channel)return;
-      if(channel.isPrivate && !channel.allowedUsers.includes(senderId))
-      {
-        socket.emit("error","Not allowed");
-        return;
-      }
-      const message=await message.create({
-        channelId,
-        senderId,
-        messageType:"file",
-        fileUrl,
-      });
-      io.to(channelId).emit("new-message",message);
+    io.to(channelId).emit("message:new", message);
+  });
+
+  // Handle file messages
+  socket.on("message:file", async ({ channelId, senderId, fileUrl }) => {
+    const channel = await Channel.findById(channelId);
+    if (!channel) return;
+
+    if (channel.isPrivate && !channel.allowedUsers.includes(senderId)) {
+      socket.emit("error", "Not allowed");
+      return;
+    }
+
+    const message = await Message.create({
+      channelId,
+      senderId,
+      fileUrl,
+      messageType: "file",
     });
+
+    io.to(channelId).emit("message:new", message);
+  });
 
     socket.on("disconnect", () => {
-      console.log("User disconnected:", socket.id);
+      console.log("User disconnected");
     });
   });
 };
