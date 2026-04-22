@@ -23,6 +23,7 @@ BACKEND/
 │   ├── controllers/                      # Business logic handlers
 │   │   ├── attachmentController.js       # File attachment handling
 │   │   ├── authController.js             # Authentication & authorization
+│   │   ├── canvaController.js            # Canva export management
 │   │   ├── channelController.js          # Channel/chat management
 │   │   ├── complaintController.js        # Complaint management
 │   │   ├── dashboardController.js        # Dashboard statistics
@@ -91,8 +92,10 @@ BACKEND/
 │   │   └── upload.js             # File upload middleware (extra)
 │
 │   ├── services/                   # External service integrations
+│   │   ├── canvaService.js         # Canva integration
 │   │   ├── githubAPI.js            # GitHub API integration
 │   │   └── googleCalendar.js       # Google Calendar integration
+│   │   └── slackBot.js             # Slack Bot integration
 │   │
 │   ├── utils/                      # Utility/helper functions
 │   │   ├── email.js                # Email handling utilities
@@ -293,6 +296,10 @@ GOOGLE_CALENDAR_ENABLED=false
 GOOGLE_CALENDAR_ID=primary
 GOOGLE_SERVICE_ACCOUNT_KEY=path/to/service-account.json
 
+# Canva API Configuration
+CANVA_ACCESS_TOKEN=your_canva_access_token_here
+CANVA_API_BASE=https://api.canva.com/rest/v1
+
 # Server Authentication
 RESET_TOKEN_SECRET=your_reset_token_secret_here
 RESET_TOKEN_EXPIRES_MIN=your_reset_token_expires_in_minutes_here
@@ -300,6 +307,11 @@ JWT_ACCESS_SECRET=your_jwt_access_secret_here
 JWT_ACCESS_EXPIRES=your_jwt_access_expires_in_minutes_here
 JWT_REFRESH_SECRET=your_jwt_refresh_secret_here
 JWT_REFRESH_EXPIRES=your_jwt_refresh_expires_in_minutes_here
+
+## Slack Bot Configuration
+SLACK_BOT_TOKEN=your_slack_bot_token_here
+SLACK_SIGNING_SECRET=your_slack_signing_secret_here
+SLACK_APP_TOKEN=your_slack_app_token_here
 ```
 
 ### 4️⃣ Run the Development Server
